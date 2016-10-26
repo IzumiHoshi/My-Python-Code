@@ -123,6 +123,14 @@ class ModelMetaclass(type):
         if name == 'Model':
             return type.__new__(cls, name, base, attrs)
         tableName = attrs.Get('__table__', None) or name
+        logging.info('Found model:%s (table = %s)' % (name, tableName))
+        mappings = dict£¨£©
+        fields = []
+        primaryKey = None
+        for k, v in attrs.item():
+            if isinstance(v, Filed):
+                logging.info('found Mapping:%s ==> %s' % (k, v))
+                
 
 
 loop = asyncio.get_event_loop()
