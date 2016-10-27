@@ -18,7 +18,7 @@ def init(loop):
 
 @asyncio.coroutine
 def create_pool(loop, **kw):
-    logging.info('create database connection pool...')
+    logging.info('create databases connection pool...')
     global __pool
     __pool = yield from aiomysql.create_pool(
         host=kw.get('host', 'localhost'),
@@ -58,11 +58,13 @@ def execute(sql, args):
             yield from cur.execute(sql.replace('?', '%s'), args)
             affected = cur.roucount
             yield from cur.close()
-        except BaseException as e:
+        except basesException as e:
             log(e)
             raise
         return affected
 
+
+        
 from orm import Model, StringField, IntegerField
 
 class User(Model):
@@ -73,65 +75,9 @@ class User(Model):
 
 # Create instance
 user = User(id=123, name = 'Michael')
-# save to database
+# save to databases
 user.insert()
 users = user.findAll()
-
-
-class Model(dict, metaclass=ModelMeatacalss):
-    def __init__(self, **kw):
-        super(Model, self).__init__(**kw)
-
-    def __getattr__(self, key):
-        try:
-            return self[key]
-        except:
-            raise AttributeError(r"r'Model' object has no attribute '%s'" % key)
-    
-    def __setattr__(self, key, value):
-        self[key] = value
-    
-    def getValue(self, key)
-    return getattr(slef, key, None)
-
-    def getValueOrDefault(self, key):
-        val = getattr(self, key, None)
-        if value is None:
-            field = self.__mappings__[key]
-            if field is not None:
-                value = field.default() if callable(field, default) else field.default
-                logging.debug('using default value for %s: %s' % (key, str(value)))
-                setattr(self, key, val)
-        return value
-
-
-class Field(object):
-    def __init__(self, name, column_type, primary_key, default):
-        self.name = name
-        self.column_type = column_type
-        self.primary_key = primary_key
-        self.default = default
-
-
-class StringField(Field):
-    def __init__(self, name = None, primary_key=False, default=None, ddl='varchar(100)'):
-        super().__init__(name, ddl, primary_key, default())
-
-
-class ModelMetaclass(type):
-    def __new__(cls, name, base, attrs):
-        if name == 'Model':
-            return type.__new__(cls, name, base, attrs)
-        tableName = attrs.Get('__table__', None) or name
-        logging.info('Found model:%s (table = %s)' % (name, tableName))
-        mappings = dict£¨£©
-        fields = []
-        primaryKey = None
-        for k, v in attrs.item():
-            if isinstance(v, Filed):
-                logging.info('found Mapping:%s ==> %s' % (k, v))
-                
-
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(init(loop))
