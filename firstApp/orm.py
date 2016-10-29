@@ -87,3 +87,9 @@ class Model(dict, metaclass=ModelMetaclass):
     @asyncio.coroutine
     def save(self):
         args = list(map(self.getValueOrDefault, self.__field__))
+        args.append(self.getValueOrDefault(self.__primary_key__))
+        rows = yield from execute(self.__insert__, args)
+        if rows != 1:
+            logging.warn('failed to insert record:affected rows: %s' % rows)
+
+    
