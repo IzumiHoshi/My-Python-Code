@@ -3,7 +3,7 @@ import logging; logging.basicConfig(level=logging.INFO)
 import asyncio, os, json, time
 from datetime import datetime
 
-from aiohttp import web
+# from aiohttp import web
 
 def index(request):
     return web.Response(body=b'<h1>Awesome</h1>', content_type='text/html', charset='utf-8')
@@ -73,11 +73,17 @@ class User(Model):
     id = IntegerField(primary_key=True)
     name = StringField()
 
-# Create instance
+# # Create instance
 user = User(id=123, name = 'Michael')
-# save to databases
-user.insert()
-users = user.findAll()
+yield from user.save()
+# # save to databases
+# user.insert()
+# users = user.findAll()
+
+user = yield from User.find('123')
+
+
+
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(init(loop))
