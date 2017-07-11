@@ -48,10 +48,11 @@ def runthread(n):
             lock.release()
 
 
-t1 = threading.Thread(target=runthread, args=(5,))
-t2 = threading.Thread(target=runthread, args=(8,))
-t1.start()
-t2.start()
-t1.join()
-t2.join()
-print(balance)
+if __name__ == '__main__':
+    t1 = threading.Thread(target=runthread, args=(5,))
+    t2 = threading.Thread(target=runthread, args=(8,))
+    t1.start()
+    t2.start()
+    t1.join()
+    t2.join()
+    print(balance)
