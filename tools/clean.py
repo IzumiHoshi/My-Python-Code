@@ -1,12 +1,14 @@
 import os
+import argparse
 
 rubish = ['.obj', '.pdb', '.ilk',
- '.pch', '.res', '.tlog', '.idb',
-  '.ipch', '.suo', '.sdf', '.lastbuildstate']
+          '.pch', '.res', '.tlog', '.idb',
+          '.ipch', '.suo', '.sdf', '.exp',
+          '.lastbuildstate']
 
 
 def myscans(dir, words=[]):
-    def finddir(fuckdir, word=[], dirpath=[]):     
+    def finddir(fuckdir, word=[], dirpath=[]):
         for x in os.listdir(fuckdir):
             mycah = os.path.join(fuckdir, x)
             ret = os.path.isdir(mycah)
@@ -29,12 +31,14 @@ def myscans(dir, words=[]):
                         finally:
                             print('finally')
                             break
-                       
+
         return dirpath
     print('scan into :%s' % dir)
-    return (finddir(dir, words))
+    return finddir(dir, words)
 
 
 if __name__ == '__main__':
-    print(myscans('.', rubish))
-
+    parser = argparse.ArgumentParser(description='Clean trash')
+    parser.add_argument(dest='folder', metavar='clean folder')
+    args = parser.parse_args()
+    print(myscans(args.folder, rubish))
